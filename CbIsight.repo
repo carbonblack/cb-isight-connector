@@ -1,0 +1,9 @@
+[CbIsight]
+name=CbIsight
+baseurl=https://yum.carbonblack.com/enterprise/integrations/cbisight/x86_64
+gpgcheck=0
+enabled=1
+metadata_expire=60
+sslverify=1
+sslclientcert=/etc/cb/certs/carbonblack-alliance-client.crt
+sslclientkey=/etc/cb/certs/carbonblack-alliance-client.key
