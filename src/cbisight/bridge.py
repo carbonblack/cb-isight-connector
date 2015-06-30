@@ -76,7 +76,7 @@ class Bridge(object):
 
     def perform(self, history_in_days=30):
         _logger.info("Contacting iSIGHT for IOCs for last {0:d} days".format(history_in_days))
-        reports = json.loads(self.isight_api.get_i_and_w(history_in_days, format='json'))
+        reports = json.loads(self.isight_api.get_iocs(history_in_days, format='json'))
         report_set = set()
         for report in reports['message']:
             report_set.add((report['reportLink'].split('/')[-1], long(report['publishDate'])))
@@ -336,6 +336,9 @@ def perform(configpath, export_mode):
         if not feed_id:
             _logger.info("Creating iSIGHT feed for the first time")
             c.feed_add_from_url("file://" + CB_ISIGHT_ROOT + '/isight_feed.json', True, False, False)
+
+        # force a synchronization
+        c.feed_synchronize(feed_name)
 
 
 def generate_feed_metadata(feed_name):
