@@ -31,7 +31,7 @@ setup(
     author_email='support@bit9.com',
     description='Carbon Black iSIGHT Connector',
     long_description=__doc__,
-    packages=['cbisight', 'cbisight.cbfeeds', 'cbisight.cbapi'],
+    packages=['cbisight'],
     data_files=data_files,
     package_dir = {'cbisight': 'src/cbisight'},
     package_data={'cbisight': ['content/*']},

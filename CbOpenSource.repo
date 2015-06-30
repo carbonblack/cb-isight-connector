@@ -1,6 +1,6 @@
-[CbIsight]
-name=CbIsight
-baseurl=https://yum.carbonblack.com/enterprise/integrations/cbisight/x86_64
+[CbOpenSource]
+name=CbOpenSource
+baseurl=https://opensource.carbonblack.com/release/x86_64
 gpgcheck=0
 enabled=1
 metadata_expire=60

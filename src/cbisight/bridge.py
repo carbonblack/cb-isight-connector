@@ -10,9 +10,8 @@ import os
 import sys
 import logging
 from contextlib import contextmanager
-import time
 import json
-import ipaddress
+import ipaddr
 import csv
 from cStringIO import StringIO
 from collections import defaultdict
@@ -111,9 +110,9 @@ class Bridge(object):
 
             if row['cidr']:
                 cidr_block = unicode(row['cidr'])
-                cidr_block = ipaddress.IPv4Network(cidr_block)
-                if cidr_block.num_addresses <= 256:
-                    report['iocs']['ipv4'].update([unicode(x) for x in cidr_block.hosts()])
+                cidr_block = ipaddr.IPv4Network(cidr_block)
+                if cidr_block.numhosts <= 256:
+                    report['iocs']['ipv4'].update([unicode(x) for x in cidr_block.iterhosts()])
                 else:
                     _logger.info("Ignoring larger than /24 netblock ({0:s})".format(cidr_block))
             if row['ip']:
@@ -181,9 +180,9 @@ class Bridge(object):
             if 'cidr' in ioc:
                 # expand out ip addresses if we are <= /24
                 cidr_block = unicode(ioc['cidr'])
-                cidr_block = ipaddress.IPv4Network(cidr_block)
-                if cidr_block.num_addresses <= 256:
-                    ipaddrs.update([unicode(x) for x in cidr_block.hosts()])
+                cidr_block = ipaddr.IPv4Network(cidr_block)
+                if cidr_block.numhosts <= 256:
+                    ipaddrs.update([unicode(x) for x in cidr_block.iterhosts()])
                 else:
                     _logger.info("Ignoring larger than /24 netblock ({0:s})".format(cidr_block))
             if 'ip' in ioc:
