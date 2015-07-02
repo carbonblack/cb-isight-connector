@@ -9,7 +9,14 @@ curl -O https://raw.githubusercontent.com/carbonblack/cb-isight-connector/master
 yum install python-cbisight-connector
 ```
 
-Once the software is installed via YUM, then you can skip down to the configuration section below to set the API and secret keys provided by iSIGHT in order to access the feed.
+Once the software is installed via YUM, then copy the `/etc/cb/integrations/isight/isight.conf.example` file to `/etc/cb/integrations/isight/isight.conf` and put your API and secret key into `iSightRemoteImportPublicKey` and `iSightRemoteImportPrivateKey` respectively.
+
+Run the integration once to make sure the configuration worked:
+```
+/usr/share/cb/integrations/isight/isight
+```
+
+Any errors will be logged into `/var/log/cb/integrations/isight/isight.log`.
 
 ## Introduction
 
