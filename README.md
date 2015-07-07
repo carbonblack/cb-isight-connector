@@ -1,5 +1,23 @@
 # Carbon Black - iSIGHT Connector
 
+## Installation Quickstart
+
+As root on your Carbon Black server:
+```
+cd /etc/yum.repos.d
+curl -O https://raw.githubusercontent.com/carbonblack/cb-isight-connector/master/CbOpenSource.repo
+yum install python-cbisight-connector
+```
+
+Once the software is installed via YUM, then copy the `/etc/cb/integrations/isight/isight.config.template` file to `/etc/cb/integrations/isight/isight.config`. Edit this file and place your API and secret key into the `iSightRemoteImportPublicKey` and `iSightRemoteImportPrivateKey` options.
+
+Run the integration once to make sure the configuration worked:
+```
+/usr/share/cb/integrations/isight/isight
+```
+
+Any errors will be logged into `/var/log/cb/integrations/isight/isight.log`.
+
 ## Introduction
 
 This document describes how to install and use the Carbon Black iSIGHT Connector.  This connector allows for the importing of iSIGHT threat intelligence feeds and tags documents matching any threat intelligence feeds in the Carbon Black database. The iSIGHT connector uses the ThreatScape v2 API as described at http://www.isightpartners.com/doc/sdk-bp-docs/#/ to retrieve threat intelligence from iSIGHT. The connector will create a Carbon Black feed for any iSIGHT threat intelligence hits, and queries for new threat indicators from iSIGHT’s ThreatScape API every hour by default.
