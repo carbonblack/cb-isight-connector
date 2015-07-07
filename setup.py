@@ -26,7 +26,7 @@ setup(
     name='python-cbisight-connector',
     version=__version__,
     url='http://www.bit9.com/',
-    license='BSD',
+    license='MIT',
     author='Carbon Black',
     author_email='support@bit9.com',
     description='Carbon Black iSIGHT Connector',
@@ -40,7 +40,7 @@ setup(
     classifiers=[
         'Environment :: Web Environment',
         'Intended Audience :: Developers',
-        'License :: BSD',
+        'License :: MIT',
         'Operating System :: OS Independent',
         'Programming Language :: Python',
         'Topic :: Software Development :: Libraries :: Python Modules'
