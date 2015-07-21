@@ -1,6 +1,6 @@
 # Carbon Black - iSIGHT Connector
 
-For more information on iSIGHT and a special license offer from Carbon Black customers, see http://info.isightpartners.com/upgrade/carbonblack.
+For more information on iSIGHT and a special license offer for Carbon Black customers, see http://info.isightpartners.com/upgrade/carbonblack.
 
 ## Installation Quickstart
 
