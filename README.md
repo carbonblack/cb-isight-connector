@@ -48,12 +48,12 @@ cb-enterprise-5.0.0.150122.1654-1.el6.x86_64
 
 ## Configuration
 
-You'll need to place a configuration file in the following location: `/etc/cb/integrations/isight/isight.conf`
+You'll need to place a configuration file in the following location: `/etc/cb/integrations/isight/isight.config`
 
-A sample file is provided in `/etc/cb/integrations/isight/isight.conf.example`, so you can rename the file with the following command: 
+A sample file is provided in `/etc/cb/integrations/isight/isight.config.example`, so you can rename the file with the following command: 
 
 ```
-mv /etc/cb/integrations/isight/isight.conf.example /etc/cb/integrations/isight/isight.conf
+mv /etc/cb/integrations/isight/isight.config.example /etc/cb/integrations/isight/isight.config
 ```
 
 The example configuration file is placed here along with the comments it contains:
@@ -87,12 +87,12 @@ iSightRemoteImportDaysBack=80
 
 ## Execution
 
-By default the Linux cron daemon will run this integration every hour to check for new data from the iSIGHT ThreatScape API server.  When it runs it will use the current settings found in `/etc/cb/integrations/isight/isight.conf`, so make sure you are careful when changing any of those settings.
+By default the Linux cron daemon will run this integration every hour to check for new data from the iSIGHT ThreatScape API server.  When it runs it will use the current settings found in `/etc/cb/integrations/isight/isight.config`, so make sure you are careful when changing any of those settings.
 
 When you first install the connector, you might not want to wait until the hour mark for the job to run.  In this case, you can force the connector to run manually.  As either root or cb user on the Carbon Black Server, execute the following command:
 
 ```
-/usr/share/cb/integrations/isight/isight -c /etc/cb/integrations/isight/isight.conf
+/usr/share/cb/integrations/isight/isight -c /etc/cb/integrations/isight/isight.config
 ```
 
 It is perfectly fine to do this because the script will only allow one copy of itself to run at a time, so you don't have to worry about the cron daemon attempting to run this while your manual instance is still executing.  
