@@ -304,6 +304,7 @@ def perform(configpath, export_mode):
 
     if config.has_option('cb-isight', 'https_proxy'):
         os.environ['HTTPS_PROXY'] = config.get('cb-isight', 'https_proxy')
+        os.environ['no_proxy'] = '127.0.0.1,localhost'
 
     isight_bridge = Bridge(api_route, api_key, sec_key)
     if read_reports:
@@ -313,7 +314,9 @@ def perform(configpath, export_mode):
 
     cb_reports = []
     for report in reports:
-        feed_entry = dict((k, report[k]) for k in ('id', 'title', 'link', 'iocs', 'timestamp'))
+        cb_id = 'isight-%s' % report['id']
+        feed_entry = dict((k, report[k]) for k in ('title', 'link', 'iocs', 'timestamp'))
+        feed_entry['id'] = cb_id
         feed_entry['score'] = default_score
         cb_reports.append(feed_entry)
 
@@ -328,6 +331,7 @@ def perform(configpath, export_mode):
         _logger.info("Creating iSIGHT feed at {0:s}".format(
                      os.path.join(CB_ISIGHT_ROOT, 'isight_feed.json')))
         os.rename(fp.name, os.path.join(CB_ISIGHT_ROOT, 'isight_feed.json'))
+        os.chmod(fp.name, 0755)
 
         c = connect_local_cbapi(config.get('cb-isight', 'carbonblack_server_token'))
         feed_id = c.feed_get_id_by_name(feed_name)
