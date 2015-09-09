@@ -354,9 +354,8 @@ def generate_feed_metadata(feed_name):
     this is feed 'metadata' - the description of the feed, and not the feed contents
     """
 
-    # TODO: add icon back in before release
     feed = {"name": feed_name, "display_name": "iSIGHT Partners feed",
-            "summary": "iSIGHT Partners provides a cyber intelligence feed",
+            "summary": "This is the Carbon Black-iSIGHT connector v2.0",
             "tech_data": "There are no requirements to share any data with Carbon Black to receive this feed."
                          "  The underlying IOC data is provided by iSIGHT Partners",
             "provider_url": "http://www.isightpartners.com/", "icon": "/usr/share/cb/integrations/isight/isight.png"}
