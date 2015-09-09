@@ -35,8 +35,8 @@ class FatalError(Exception):
     pass
 
 
-def connect_local_cbapi(api_token):
-    return cbapi.CbApi('https://{0:s}:{1:d}/'.format('127.0.0.1', 443), token=api_token, ssl_verify=False,
+def connect_local_cbapi(local_server_url, api_token):
+    return cbapi.CbApi(local_server_url, token=api_token, ssl_verify=False,
                        ignore_system_proxy=True)
 
 
@@ -333,7 +333,12 @@ def perform(configpath, export_mode):
         os.rename(fp.name, destination_filename)
         os.chmod(destination_filename, 0755)
 
-        c = connect_local_cbapi(config.get('cb-isight', 'carbonblack_server_token'))
+        if config.has_option('cb-isight', 'carbonblack_server_url'):
+            local_cb_server = config.get('cb-isight', 'carbonblack_server_url')
+        else:
+            local_cb_server = 'https://127.0.0.1'
+
+        c = connect_local_cbapi(local_cb_server, config.get('cb-isight', 'carbonblack_server_token'))
         feed_id = c.feed_get_id_by_name(feed_name)
         if not feed_id:
             _logger.info("Creating iSIGHT feed for the first time")
