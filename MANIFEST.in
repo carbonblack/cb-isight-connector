@@ -3,4 +3,4 @@ recursive-include root/etc *
 recursive-include root/usr *
 recursive-include scripts *
 
-include cb-isight-connector.spec
+include isight.spec
