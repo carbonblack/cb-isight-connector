@@ -1,4 +1,6 @@
-recursive-include src/isight/ *
-recursive-include src/root/etc *
-recursive-include src/root/usr *
-recursive-include src/root/var *
+recursive-include isight *
+recursive-include root/etc *
+recursive-include root/usr *
+recursive-include scripts *
+
+include cb-isight-connector.spec
