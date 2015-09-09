@@ -328,10 +328,10 @@ def perform(configpath, export_mode):
     else:
         with NamedTemporaryFile(dir=CB_ISIGHT_ROOT, delete=False) as fp:
             fp.write(raw_feed_data)
-        _logger.info("Creating iSIGHT feed at {0:s}".format(
-                     os.path.join(CB_ISIGHT_ROOT, 'isight_feed.json')))
-        os.rename(fp.name, os.path.join(CB_ISIGHT_ROOT, 'isight_feed.json'))
-        os.chmod(fp.name, 0755)
+        destination_filename = os.path.join(CB_ISIGHT_ROOT, 'isight_feed.json')
+        _logger.info("Creating iSIGHT feed at {0:s}".format(destination_filename))
+        os.rename(fp.name, destination_filename)
+        os.chmod(destination_filename, 0755)
 
         c = connect_local_cbapi(config.get('cb-isight', 'carbonblack_server_token'))
         feed_id = c.feed_get_id_by_name(feed_name)
