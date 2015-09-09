@@ -139,8 +139,8 @@ def get_data_files(rootdir):
 
 data_files = get_data_files("root")
 scripts = {
-    'cb-isight-connector': {
-        'spec': 'cb-isight-connector.spec',
+    'isight': {
+        'spec': 'isight.spec',
         'dest': '/usr/share/cb/integrations/isight/isight'
     }
 }
