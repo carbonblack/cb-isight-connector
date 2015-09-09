@@ -3,7 +3,7 @@ import argparse
 import time
 
 __author__ = 'cb'
-__version__ = "1.0.15529"
+__version__ = "2.0-4"
 
 import sqlite3
 from isight_api import ISightAPI
