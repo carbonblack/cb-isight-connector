@@ -34,22 +34,8 @@ class FatalError(Exception):
     pass
 
 
-def connect_local_cbapi():
-    from cb.utils import Config
-    from cb.utils.db import db_session_context
-    from cb.db.core_models import User
-
-    cfg = Config()
-    cfg.load('/etc/cb/cb.conf')
-    db_session_context = db_session_context(cfg)
-    db_session = db_session_context.get()
-
-    user = db_session.query(User).filter(User.global_admin == True).first()
-    api_token = user.auth_token
-    db_session_context.finish()
-
-    port = cfg.NginxWebApiHttpPort
-    return cbapi.CbApi('https://{0:s}:{1:d}/'.format('127.0.0.1', port), token=api_token, ssl_verify=False)
+def connect_local_cbapi(api_token):
+    return cbapi.CbApi('https://{0:s}:{1:d}/'.format('127.0.0.1', 443), token=api_token, ssl_verify=False)
 
 
 class Bridge(object):
@@ -295,7 +281,7 @@ def perform(configpath, export_mode):
     if not config.has_section('cb-isight'):
         raise FatalError("Config File must have cb-isight section")
 
-    for option in ['iSightRemoteImportPublicKey', 'iSightRemoteImportPrivateKey']:
+    for option in ['iSightRemoteImportPublicKey', 'iSightRemoteImportPrivateKey', 'carbonblack_server_token']:
         if not config.has_option('cb-isight', option):
             raise FatalError("Config file not complete: missing option {0:s}".format(option))
 
@@ -334,7 +320,7 @@ def perform(configpath, export_mode):
                      os.path.join(CB_ISIGHT_ROOT, 'isight_feed.json')))
         os.rename(fp.name, os.path.join(CB_ISIGHT_ROOT, 'isight_feed.json'))
 
-        c = connect_local_cbapi()
+        c = connect_local_cbapi(config.get('cb-isight', 'carbonblack_server_token'))
         feed_id = c.feed_get_id_by_name(feed_name)
         if not feed_id:
             _logger.info("Creating iSIGHT feed for the first time")
