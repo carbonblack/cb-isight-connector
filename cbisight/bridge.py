@@ -294,7 +294,7 @@ def perform(configpath, export_mode):
     read_reports = config.getboolean("cb-isight", "iSightGetReports")
 
     if config.has_option('cb-isight', 'https_proxy'):
-        os.environ['HTTPS_PROXY'] = config.get('cb_isight', 'https_proxy')
+        os.environ['HTTPS_PROXY'] = config.get('cb-isight', 'https_proxy')
 
     isight_bridge = Bridge(api_route, api_key, sec_key)
     if read_reports:
