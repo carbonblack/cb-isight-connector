@@ -1,8 +1,9 @@
 import traceback
 import argparse
+import time
 
 __author__ = 'cb'
-__version__ = "1.0.15529"
+__version__ = "2.0-4"
 
 import sqlite3
 from isight_api import ISightAPI
@@ -34,22 +35,9 @@ class FatalError(Exception):
     pass
 
 
-def connect_local_cbapi():
-    from cb.utils import Config
-    from cb.utils.db import db_session_context
-    from cb.db.core_models import User
-
-    cfg = Config()
-    cfg.load('/etc/cb/cb.conf')
-    db_session_context = db_session_context(cfg)
-    db_session = db_session_context.get()
-
-    user = db_session.query(User).filter(User.global_admin == True).first()
-    api_token = user.auth_token
-    db_session_context.finish()
-
-    port = cfg.NginxWebApiHttpPort
-    return cbapi.CbApi('https://{0:s}:{1:d}/'.format('127.0.0.1', port), token=api_token, ssl_verify=False)
+def connect_local_cbapi(local_server_url, api_token):
+    return cbapi.CbApi(local_server_url, token=api_token, ssl_verify=False,
+                       ignore_system_proxy=True)
 
 
 class Bridge(object):
@@ -96,13 +84,20 @@ class Bridge(object):
         for row in csv.DictReader(iocs):
             report_id = row['reportId']
 
+            try:
+                timestamp = int(row['publishDate'])
+            except ValueError as e:
+                _logger.error("Invalid publishDate for reportId %s: %s. Setting to today's date." % (report_id,
+                                                                                                     row['publishDate']))
+                timestamp = int(time.time())
+
             if report_id not in reports.keys():
                 # add new report metadata
                 reports[report_id] = {
                     'id': report_id,
                     'title': row['title'],
                     'link': row['webLink'],
-                    'timestamp': row['publishDate'],
+                    'timestamp': timestamp,
                     'iocs': defaultdict(set)
                 }
 
@@ -295,7 +290,7 @@ def perform(configpath, export_mode):
     if not config.has_section('cb-isight'):
         raise FatalError("Config File must have cb-isight section")
 
-    for option in ['iSightRemoteImportPublicKey', 'iSightRemoteImportPrivateKey']:
+    for option in ['iSightRemoteImportPublicKey', 'iSightRemoteImportPrivateKey', 'carbonblack_server_token']:
         if not config.has_option('cb-isight', option):
             raise FatalError("Config file not complete: missing option {0:s}".format(option))
 
@@ -307,6 +302,10 @@ def perform(configpath, export_mode):
     feed_name = config.get("cb-isight", "iSightFeedName")
     read_reports = config.getboolean("cb-isight", "iSightGetReports")
 
+    if config.has_option('cb-isight', 'https_proxy'):
+        os.environ['HTTPS_PROXY'] = config.get('cb-isight', 'https_proxy')
+        os.environ['no_proxy'] = '127.0.0.1,localhost'
+
     isight_bridge = Bridge(api_route, api_key, sec_key)
     if read_reports:
         reports = isight_bridge.perform(days_back)
@@ -315,7 +314,9 @@ def perform(configpath, export_mode):
 
     cb_reports = []
     for report in reports:
-        feed_entry = dict((k, report[k]) for k in ('id', 'title', 'link', 'iocs', 'timestamp'))
+        cb_id = 'isight-%s' % report['id']
+        feed_entry = dict((k, report[k]) for k in ('title', 'link', 'iocs', 'timestamp'))
+        feed_entry['id'] = cb_id
         feed_entry['score'] = default_score
         cb_reports.append(feed_entry)
 
@@ -327,11 +328,17 @@ def perform(configpath, export_mode):
     else:
         with NamedTemporaryFile(dir=CB_ISIGHT_ROOT, delete=False) as fp:
             fp.write(raw_feed_data)
-        _logger.info("Creating iSIGHT feed at {0:s}".format(
-                     os.path.join(CB_ISIGHT_ROOT, 'isight_feed.json')))
-        os.rename(fp.name, os.path.join(CB_ISIGHT_ROOT, 'isight_feed.json'))
+        destination_filename = os.path.join(CB_ISIGHT_ROOT, 'isight_feed.json')
+        _logger.info("Creating iSIGHT feed at {0:s}".format(destination_filename))
+        os.rename(fp.name, destination_filename)
+        os.chmod(destination_filename, 0755)
 
-        c = connect_local_cbapi()
+        if config.has_option('cb-isight', 'carbonblack_server_url'):
+            local_cb_server = config.get('cb-isight', 'carbonblack_server_url')
+        else:
+            local_cb_server = 'https://127.0.0.1'
+
+        c = connect_local_cbapi(local_cb_server, config.get('cb-isight', 'carbonblack_server_token'))
         feed_id = c.feed_get_id_by_name(feed_name)
         if not feed_id:
             _logger.info("Creating iSIGHT feed for the first time")

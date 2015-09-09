@@ -1,9 +1,0 @@
-#!/bin/sh
-
-mkdir -p /var/log/cb/integrations/isight/
-touch /var/log/cb/integrations/isight/isight.log
-mkdir -p /var/run/cb/isight-connector
-
-chown -R cb:cb /var/log/cb/integrations/isight
-chown -R cb:cb /var/run/cb/isight-connector
-chmod +x /usr/share/cb/integrations/isight/isight

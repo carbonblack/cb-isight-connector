@@ -21,3 +21,5 @@ iSightGetReports=false
 #
 iSightRemoteImportDaysBack=80
 
+# Configure proxies here
+# https_proxy=http://proxyuser:proxypass@proxyhostname:proxyport

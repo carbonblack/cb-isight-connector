@@ -1,0 +1,13 @@
+__author__ = 'jgarman'
+
+from cbisight.bridge import main
+import sys
+import os
+
+
+if __name__ == '__main__':
+    cacert_pem_path = "/usr/share/cb/integrations/isight/cacert.pem"
+    if os.path.isfile(cacert_pem_path):
+        os.environ["REQUESTS_CA_BUNDLE"] = cacert_pem_path
+
+    sys.exit(main())
