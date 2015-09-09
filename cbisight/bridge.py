@@ -1,5 +1,6 @@
 import traceback
 import argparse
+import time
 
 __author__ = 'cb'
 __version__ = "1.0.15529"
@@ -83,13 +84,20 @@ class Bridge(object):
         for row in csv.DictReader(iocs):
             report_id = row['reportId']
 
+            try:
+                timestamp = int(row['publishDate'])
+            except ValueError as e:
+                _logger.error("Invalid publishDate for reportId %s: %s. Setting to today's date." % (report_id,
+                                                                                                     row['publishDate']))
+                timestamp = int(time.time())
+
             if report_id not in reports.keys():
                 # add new report metadata
                 reports[report_id] = {
                     'id': report_id,
                     'title': row['title'],
                     'link': row['webLink'],
-                    'timestamp': row['publishDate'],
+                    'timestamp': timestamp,
                     'iocs': defaultdict(set)
                 }
 
