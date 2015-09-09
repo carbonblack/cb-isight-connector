@@ -35,7 +35,8 @@ class FatalError(Exception):
 
 
 def connect_local_cbapi(api_token):
-    return cbapi.CbApi('https://{0:s}:{1:d}/'.format('127.0.0.1', 443), token=api_token, ssl_verify=False)
+    return cbapi.CbApi('https://{0:s}:{1:d}/'.format('127.0.0.1', 443), token=api_token, ssl_verify=False,
+                       ignore_system_proxy=True)
 
 
 class Bridge(object):
