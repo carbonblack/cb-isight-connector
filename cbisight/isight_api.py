@@ -79,7 +79,7 @@ class ISightAPI(object):
     @staticmethod
     def get_then_time(days_back_to_retrieve):
         now = int(time.time())
-        return now - days_back_to_retrieve*8600
+        return now - days_back_to_retrieve*86400
 
     def get_i_and_w(self, days_back_to_retrieve, format='csv'):
         """
