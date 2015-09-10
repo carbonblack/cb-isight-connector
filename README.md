@@ -7,7 +7,7 @@ For more information on iSIGHT and a special license offer for Carbon Black cust
 As root on your Carbon Black server:
 ```
 cd /etc/yum.repos.d
-curl -O https://raw.githubusercontent.com/carbonblack/cb-isight-connector/master/CbOpenSource.repo
+curl -O https://opensource.carbonblack.com/release/x86_64/CbOpenSource.repo
 yum install python-cbisight-connector
 ```
 
@@ -81,9 +81,28 @@ iSightGetReports=false
 # Number of days (relative to today) to back-pull reports from
 #
 iSightRemoteImportDaysBack=80
+
+# API token for the Carbon Black server
+# This is used to set up the iSIGHT feed and update the Cb feed every time a new version is downloaded
+# from the iSIGHT APi
+carbonblack_server_token=
+
+# If you need to use an HTTPS proxy to access the iSIGHT API server, uncomment and configure the https_proxy
+# variable below.
+# https_proxy=http://proxyuser:proxypass@proxyhostname:proxyport
+
 ```
 
-*The required fields are `iSightRemoteImportPublicKey`, `iSightRemoteImportPrivateKey` and `iSightRemoteImportUrl`. The URL should not have to change; the default will be correct for iSIGHT ThreatScape customers. The Public and Private key fields must be set to the API key and secret key, respectively, provided by iSIGHT.*
+*To download reports from iSIGHT, you must set `iSightRemoteImportPublicKey`, `iSightRemoteImportPrivateKey` 
+and `iSightRemoteImportUrl`. The URL should not have to change; the default will be correct for 
+iSIGHT ThreatScape customers. The Public and Private key fields must be set to the API key and 
+secret key, respectively, provided by iSIGHT.*
+
+*You must also fill in an API token for your Carbon Black server in `carbonblack_server_token`. You can
+access your API token by logging in as an administrative user on the Cb web user interface, then 
+clicking your name in the top right corner, and selecting "Profile". You will see "API token" on the left
+hand side. Clicking this will reveal the API token associated with the current user. Copy and paste
+this token after the equal sign on the `carbonblack_server_token` line in the configuration file.* 
 
 ## Execution
 

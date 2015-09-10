@@ -21,5 +21,11 @@ iSightGetReports=false
 #
 iSightRemoteImportDaysBack=80
 
-# Configure proxies here
+# API token for the Carbon Black server
+# This is used to set up the iSIGHT feed and update the Cb feed every time a new version is downloaded
+# from the iSIGHT APi
+carbonblack_server_token=
+
+# If you need to use an HTTPS proxy to access the iSIGHT API server, uncomment and configure the https_proxy
+# variable below.
 # https_proxy=http://proxyuser:proxypass@proxyhostname:proxyport
