@@ -97,15 +97,23 @@ carbonblack_server_token=
 ```
 
 *To download reports from iSIGHT, you must set `iSightRemoteImportPublicKey`, `iSightRemoteImportPrivateKey` 
-and `iSightRemoteImportUrl`. The URL should not have to change; the default will be correct for 
+and `iSightRemoteImportUrl`.* The URL should not have to change; the default will be correct for 
 iSIGHT ThreatScape customers. The Public and Private key fields must be set to the API key and 
-secret key, respectively, provided by iSIGHT.*
+secret key, respectively, provided by iSIGHT.
 
-*You must also fill in an API token for your Carbon Black server in `carbonblack_server_token`. You can
+*You must also fill in an API token for your Carbon Black server in `carbonblack_server_token`.* You can
 access your API token by logging in as an administrative user on the Cb web user interface, then 
 clicking your name in the top right corner, and selecting "Profile". You will see "API token" on the left
 hand side. Clicking this will reveal the API token associated with the current user. Copy and paste
-this token after the equal sign on the `carbonblack_server_token` line in the configuration file.* 
+this token after the equal sign on the `carbonblack_server_token` line in the configuration file.
+
+If your Carbon Black server listens on a port other than 443, then add the `carbonblack_server_url` option to the 
+configuration file to specify the correct port to reach the Carbon Black API. For example, if the Carbon Black server
+is listening on port 8443, then add the following line to the configuration file:
+
+```
+carbonblack_server_url=https://127.0.0.1:8443
+```
 
 ## Execution
 
@@ -128,6 +136,21 @@ Note #2: this script logs everything to `/var/log/cb/integrations/isight/isight.
 If you suspect a problem, please first look at the iSIGHT connector logs found here: `/var/log/cb/integrations/isight/isight.log`
 
 (There might be multiple files as the logger "rolls over" when the log file hits a certain size).
+
+If you receive a 404 error in the log file similar to the following, then the iSIGHT connector could not 
+reach your Carbon Black server on the default port, 443. See the [Configuration](#configuration) section above
+to define the port that your Carbon Black server is listening on.
+
+```
+2015-09-28 18:24:26,339 - cb-isight - INFO - Creating iSIGHT feed at /var/run/cb/isight-connector/isight_feed.json
+2015-09-28 18:24:26,352 - cb-isight - ERROR - Traceback (most recent call last):
+  File "/home/builduser/rpmbuild/BUILD/python-cbisight-connector-2.0/build/isight/out00-PYZ.pyz/cbisight.bridge", line 270, in runner
+  File "/home/builduser/rpmbuild/BUILD/python-cbisight-connector-2.0/build/isight/out00-PYZ.pyz/cbisight.bridge", line 342, in perform
+  File "/home/builduser/rpmbuild/BUILD/python-cbisight-connector-2.0/build/isight/out00-PYZ.pyz/cbapi.cbapi", line 475, in feed_get_id_by_name
+  File "/home/builduser/rpmbuild/BUILD/python-cbisight-connector-2.0/build/isight/out00-PYZ.pyz/cbapi.cbapi", line 504, in feed_enum
+  File "/home/builduser/rpmbuild/BUILD/python-cbisight-connector-2.0/build/isight/out00-PYZ.pyz/requests.models", line 851, in raise_for_status
+HTTPError: 404 Client Error: Not Found
+```
 
 ## Contacting Bit9 Developer Relations Support
 
