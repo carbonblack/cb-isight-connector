@@ -18,6 +18,7 @@ Prefix: %{_prefix}
 BuildArch: x86_64
 Vendor: Carbon Black
 Url: http://www.carbonblack.com/
+Requires: cb-enterprise >= 5.0
 
 %description
 UNKNOWN
