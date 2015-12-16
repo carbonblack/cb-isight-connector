@@ -14,7 +14,7 @@ yum install python-cbisight-connector
 Once the software is installed via YUM, then copy the `/etc/cb/integrations/isight/isight.config.template` 
 file to `/etc/cb/integrations/isight/isight.config`. Edit this file and place your API and secret key 
 into the `iSightRemoteImportPublicKey` and `iSightRemoteImportPrivateKey` options. Also place an API token
-associated with an administrative Cb user into the `carbonblack_server_token` option.
+associated with a Cb user with Global Administrator rights into the `carbonblack_server_token` option.
 
 Run the integration once to make sure the configuration worked:
 ```
@@ -151,6 +151,9 @@ to define the port that your Carbon Black server is listening on.
   File "/home/builduser/rpmbuild/BUILD/python-cbisight-connector-2.0/build/isight/out00-PYZ.pyz/requests.models", line 851, in raise_for_status
 HTTPError: 404 Client Error: Not Found
 ```
+
+If you receive an "Access Forbidden" error in the logs after the "Creating iSIGHT feed" line, ensure that the API token is valid
+and is associated with a Global Administrator on the Carbon Black server.
 
 ## Contacting Bit9 Developer Relations Support
 
