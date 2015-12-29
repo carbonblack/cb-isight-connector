@@ -39,7 +39,7 @@ class ISightAPI(object):
         self.base_url = base_url
         self.api_key = api_key
         self.secret_key = secret_key
-        self.accept_version = '2.0'
+        self.accept_version = '2.2'
 
         self.headers = {
             'X-App-Name'    : 'cb-isight-partner-api',
