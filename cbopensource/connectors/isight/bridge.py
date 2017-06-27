@@ -26,7 +26,6 @@ from util import create_stdout_log, create_rotating_log
 import ConfigParser
 from tempfile import NamedTemporaryFile
 
-
 _logger = None
 CB_ISIGHT_ROOT = '/var/run/cb/isight-connector'
 
@@ -59,8 +58,8 @@ class Bridge(object):
         self.set_up_cache()
 
     def set_up_cache(self):
-        self.cache_db.execute('''create table if not exists isight_cache
-        (report_id text, report_publish_date int, report_json_content text)''')
+        self.cache_db.execute('''CREATE TABLE IF NOT EXISTS isight_cache
+        (report_id TEXT, report_publish_date INT, report_json_content TEXT)''')
 
     def perform(self, history_in_days=30):
         _logger.info("Contacting iSIGHT for IOCs for last {0:d} days".format(history_in_days))
@@ -88,7 +87,8 @@ class Bridge(object):
                 timestamp = int(row['publishDate'])
             except ValueError as e:
                 _logger.error("Invalid publishDate for reportId %s: %s. Setting to today's date." % (report_id,
-                                                                                                     row['publishDate']))
+                                                                                                     row[
+                                                                                                         'publishDate']))
                 timestamp = int(time.time())
 
             if report_id not in reports.keys():
@@ -208,7 +208,7 @@ class Bridge(object):
     # TODO: add error checking
     def get_report(self, report_key):
         cur = self.cache_db.cursor()
-        req = cur.execute("select report_json_content from isight_cache where report_id=? and report_publish_date=?",
+        req = cur.execute("SELECT report_json_content FROM isight_cache WHERE report_id=? AND report_publish_date=?",
                           report_key)
         content = req.fetchone()
         if content:
@@ -223,8 +223,8 @@ class Bridge(object):
 
             _logger.debug(
                 "Inserting report {0:s} published on {1:d} into local cache".format(report_key[0], report_key[1]))
-            cur.execute('''insert into isight_cache(report_id, report_publish_date, report_json_content)
-            values (?, ?, ?)''', (report_key[0], report_key[1], content))
+            cur.execute('''INSERT INTO isight_cache(report_id, report_publish_date, report_json_content)
+            VALUES (?, ?, ?)''', (report_key[0], report_key[1], content))
             self.cache_db.commit()
             content = json.loads(content)
 
@@ -272,18 +272,19 @@ def runner(configpath, export_mode, loglevel=logging.DEBUG):
             _logger.error("%s" % traceback.format_exc())
             return -1
 
+
 def perform(configpath, export_mode):
     if not os.path.exists(configpath):
         raise FatalError("Config File %s does not exist!" % configpath)
 
     config = ConfigParser.RawConfigParser(defaults=
-        {
-            'iSightRemoteImportUrl': 'https://api.isightpartners.com',
-            'iSightRemoteImportDaysBack': 80,
-            'iSightDefaultScore': 50,
-            'iSightFeedName': 'isightconnector',
-            'iSightGetReports': 'false'
-        }
+    {
+        'iSightRemoteImportUrl': 'https://api.isightpartners.com',
+        'iSightRemoteImportDaysBack': 80,
+        'iSightDefaultScore': 50,
+        'iSightFeedName': 'isightconnector',
+        'iSightGetReports': 'false'
+    }
     )
     config.read(configpath)
 

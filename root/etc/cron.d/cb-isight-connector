@@ -14,5 +14,5 @@
 # |  |  |  |  |
 # *  *  *  *  * user-name command to be executed
 
-  0  *  *  *  * cb /usr/share/cb/integrations/isight/isight -c /etc/cb/integrations/isight/isight.config >> /var/log/cb/integrations/isight/startup.out 2>&1
+# 0  *  *  *  * cb /usr/share/cb/integrations/isight/bin/cb-isight-connector -c /etc/cb/integrations/isight/connector.conf >> /var/log/cb/integrations/isight/startup.out 2>&1
 

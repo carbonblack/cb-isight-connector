@@ -1,6 +1,6 @@
 __author__ = 'jgarman'
 
-from cbisight.bridge import main
+from cbopensource.connectors.isight.bridge import main
 import sys
 import os
 
